@@ -1,0 +1,6 @@
+{
+    "warn": 500,
+    "error": 1000,
+    "scanDirs": ["src", "tests"],
+    "exclude": ["**/*.d.ts", "**/*.generated.*"]
+}

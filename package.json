@@ -1,0 +1,84 @@
+{
+    "name": "@johannes.latzel/check-line-limits",
+    "version": "1.0.0",
+    "description": "CLI tool and library to enforce per-file SLOC limits in projects",
+    "license": "MIT",
+    "files": [
+        "dist/"
+    ],
+    "author": "Johannes B. Latzel",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/johanneslatzel/check-line-limits.git"
+    },
+    "bugs": {
+        "url": "https://github.com/johanneslatzel/check-line-limits/issues"
+    },
+    "homepage": "https://github.com/johanneslatzel/check-line-limits#readme",
+    "keywords": [
+        "sloc",
+        "line-limit",
+        "code-quality",
+        "lint",
+        "cli"
+    ],
+    "engines": {
+        "node": ">=20.9"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "type": "module",
+    "bin": {
+        "check-line-limits": "./dist/cli.js"
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "prebuild": "rm -rf dist/",
+        "prepack": "npm run build",
+        "build": "tsc -p tsconfig.build.json",
+        "verify": "tsc --noEmit && eslint . --max-warnings 0 && vitest run --coverage",
+        "audit": "npm audit --audit-level=high",
+        "lint": "eslint . --max-warnings 0",
+        "format": "prettier --write 'docs/**/*.md' 'src/**/*.ts' 'tests/**/*.ts'",
+        "docs": "docker run --rm -it -p 8000:8000 -v $PWD:/docs squidfunk/mkdocs-material",
+        "test": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "clean:pack": "rm -rf node_modules dist/ package-lock.json && npm cache clean --force && npm install && npm run verify && npm run build && npm pack",
+        "clean:install": "rm -rf node_modules dist/ package-lock.json && npm cache clean --force && npm install && npm run verify",
+        "prepare": "husky"
+    },
+    "lint-staged": {
+        "src/**/*.ts": [
+            "prettier --write",
+            "eslint --max-warnings 0 --no-warn-ignored",
+            "vitest related --run"
+        ]
+    },
+    "dependencies": {
+        "sloc": "^0.3.2"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.24.0",
+        "@types/node": "^26.2.0",
+        "@types/sloc": "^0.2.3",
+        "@typescript-eslint/eslint-plugin": "^8.60.0",
+        "@typescript-eslint/parser": "^8.60.0",
+        "@vitest/coverage-v8": "^4.1.8",
+        "eslint": "^9.24.0",
+        "eslint-config-prettier": "^10.1.2",
+        "eslint-plugin-n": "^17.17.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^17.3.0",
+        "prettier": "^3.5.3",
+        "typescript": "^6.0.3",
+        "vitest": "^4.1.8"
+    }
+}
