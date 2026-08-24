@@ -66,7 +66,7 @@
         "sloc": "^0.3.2"
     },
     "devDependencies": {
-        "@eslint/js": "^9.24.0",
+        "@eslint/js": "^10.0.1",
         "@types/node": "^26.2.0",
         "@types/sloc": "^0.2.3",
         "@typescript-eslint/eslint-plugin": "^8.60.0",
