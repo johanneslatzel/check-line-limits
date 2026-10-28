@@ -15,14 +15,23 @@ Optionally create `line-limits.json` in the project root:
 ```json
 {
     "warn": 500,
-    "error": 1000,
-    "scanDirs": ["src", "tests"],
-    "skipDirs": ["node_modules", ".git", "dist", "coverage"],
-    "exclude": ["**/*.d.ts", "**/*.generated.*"]
+    "error": 1000
 }
 ```
 
-All keys are optional; the sample above matches the built-in defaults. See the [`LineLimitsConfig` table](api-reference.md#linelimitsconfig) for all options.
+All keys are optional. The sample sets the two thresholds; the full set and defaults are in the [`LineLimitsConfig` table](api-reference.md#linelimitsconfig).
+
+To check another language, map its extension to a `sloc` language identifier. A Python project:
+
+```json
+{
+    "extensions": {
+        ".py": "py"
+    }
+}
+```
+
+See [`extensions`](api-reference.md#linelimitsconfig) for the mapping format and examples.
 
 ## Run
 
@@ -42,13 +51,13 @@ Or add a script to `package.json`:
 
 Output when all files pass:
 
-```
+```text
 ✓  All 15 file(s) within thresholds (warn 500, error 1000).
 ```
 
 Output when files exceed thresholds:
 
-```
+```text
 ⚠  src/utils.ts: 520 SLOC (warn 500)
 ✗  src/big-file.ts: 1200 SLOC (error 1000)
 ```

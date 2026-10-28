@@ -133,6 +133,30 @@ describe('CLI integration', () => {
         expect(result.stdout).toContain('0 file(s)');
     });
 
+    it('checks extensions configured in line-limits.json', () => {
+        mkdirSync(join(tmpDir, 'src'), { recursive: true });
+        writeFileSync(join(tmpDir, 'src', 'app.py'), '# comment\nprint("hello")\n');
+        writeFileSync(
+            join(tmpDir, 'line-limits.json'),
+            JSON.stringify({
+                scanDirs: ['src'],
+                exclude: [],
+                extensions: { '.py': 'py' }
+            })
+        );
+
+        const result = spawnSync('node', [cliPath, '--json'], {
+            cwd: tmpDir,
+            encoding: 'utf8'
+        });
+
+        expect(result.status).toBe(0);
+        const output = JSON.parse(result.stdout);
+        expect(output.files).toEqual([
+            expect.objectContaining({ path: 'src/app.py', sloc: 1, level: 'ok' })
+        ]);
+    });
+
     it('excludes files matching patterns', () => {
         mkdirSync(join(tmpDir, 'src'), { recursive: true });
         writeFileSync(join(tmpDir, 'src', 'index.d.ts'), 'export declare const x: number;\n');

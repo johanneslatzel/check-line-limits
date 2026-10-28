@@ -62,6 +62,7 @@ describe('walkDir', () => {
         expect(result).toHaveLength(1);
         expect(result[0]?.relPath).toBe('src/app.ts');
         expect(result[0]?.ext).toBe('.ts');
+        expect(result[0]?.lang).toBe('ts');
     });
 
     it('finds .tsx, .js, .jsx, .mjs files', () => {
@@ -81,6 +82,26 @@ describe('walkDir', () => {
         writeFileSync(join(tmpDir, 'src/image.png'), '');
         const result = walkDir(join(tmpDir, 'src'), tmpDir, baseConfig);
         expect(result).toHaveLength(0);
+    });
+
+    it('skips extensions that are not configured', () => {
+        mkdirSync(join(tmpDir, 'src'));
+        writeFileSync(join(tmpDir, 'src/app.py'), '');
+        const result = walkDir(join(tmpDir, 'src'), tmpDir, baseConfig);
+        expect(result).toHaveLength(0);
+    });
+
+    it('finds extensions configured in the extension map', () => {
+        const config = { ...baseConfig, extensions: { '.py': 'py' } };
+        mkdirSync(join(tmpDir, 'src'));
+        writeFileSync(join(tmpDir, 'src/app.py'), '');
+        writeFileSync(join(tmpDir, 'src/app.ts'), '');
+        const result = walkDir(join(tmpDir, 'src'), tmpDir, config);
+        expect(result).toHaveLength(2);
+        expect(result.map((file) => file.relPath)).toEqual(
+            expect.arrayContaining(['src/app.py', 'src/app.ts'])
+        );
+        expect(result.find((file) => file.ext === '.py')?.lang).toBe('py');
     });
 
     it('skips node_modules', () => {

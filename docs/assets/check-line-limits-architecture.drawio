@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" agent="mcp-server export_drawio" version="24.7.17">
+  <diagram id="check-line-limits-architecture" name="Architecture">
+    <mxGraphModel dx="820" dy="540" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="820" pageHeight="540" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="cli" value="cli.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="load" value="loadConfig" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="130" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="walk" value="walkDir" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="250" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="check" value="checkLineLimits" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="360" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="sloc" value="sloc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="80" y="460" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="limits" value="line-limits.json" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="130" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="defaults" value="DEFAULT_EXTENSIONS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="230" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="extensions" value="extensions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="300" width="200" height="44" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_cli_load" value="loadConfig()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="cli" target="load">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_limits_load" value="JSON" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="limits" target="load">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_load_walk" value="LineLimitsConfig" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="load" target="walk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_defaults_walk" value="built-ins" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;exitX=0;exitY=0.5;entryX=1;entryY=0.25;" edge="1" parent="1" source="defaults" target="walk">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="252" />
+              <mxPoint x="340" y="261" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_extensions_walk" value="configured" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;exitX=0;exitY=0.5;entryX=1;entryY=0.75;" edge="1" parent="1" source="extensions" target="walk">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="322" />
+              <mxPoint x="340" y="283" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_walk_check" value="WalkedFile.lang" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="walk" target="check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_check_sloc" value="count SLOC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="check" target="sloc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

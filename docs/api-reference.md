@@ -28,15 +28,30 @@ if (result.hasErrors) {
 
 ### `LineLimitsConfig`
 
-| Option     | Type       | Default                                        | Description                                                |
-| ---------- | ---------- | ---------------------------------------------- | ---------------------------------------------------------- |
-| `warn`     | `number`   | `500`                                          | SLOC count that triggers a warning                         |
-| `error`    | `number`   | `1000`                                         | SLOC count that triggers a hard failure                    |
-| `scanDirs` | `string[]` | `["src", "tests"]`                             | Directories to scan, relative to the project root          |
-| `skipDirs` | `string[]` | `["node_modules", ".git", "dist", "coverage"]` | Directory names pruned from scanning, matched at any depth |
-| `exclude`  | `string[]` | see below                                      | Glob-like patterns to exclude from scanning                |
+| Option       | Type                     | Default                                        | Description                                                                                      |
+| ------------ | ------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `warn`       | `number`                 | `500`                                          | SLOC count that triggers a warning                                                               |
+| `error`      | `number`                 | `1000`                                         | SLOC count that triggers a hard failure                                                          |
+| `scanDirs`   | `string[]`               | `["src", "tests"]`                             | Directories to scan, relative to the project root                                                |
+| `skipDirs`   | `string[]`               | `["node_modules", ".git", "dist", "coverage"]` | Directory names pruned from scanning, matched at any depth                                       |
+| `exclude`    | `string[]`               | see below                                      | Glob-like patterns to exclude from scanning                                                      |
+| `extensions` | `Record<string, string>` | `{}`                                           | Extra extension-to-language mappings, merged over the built-in TypeScript and JavaScript entries |
 
 Default `exclude`: `["**/*.d.ts", "**/*.generated.*"]`
+
+The built-in mapping covers `.ts`, `.tsx`, `.js`, `.jsx`, and `.mjs`. Configure `extensions` to add any language identifier supported by `sloc`:
+
+```json
+{
+    "extensions": {
+        ".py": "py",
+        ".go": "go",
+        ".rs": "rs"
+    }
+}
+```
+
+Keys include the leading dot. Configured entries override built-in entries with the same key. Use `py` for Python: `sloc`'s `python` identifier only handles triple-quoted strings and counts `#` comments as source.
 
 ### `FileResult`
 

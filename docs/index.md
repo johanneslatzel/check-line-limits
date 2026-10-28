@@ -1,6 +1,6 @@
 # Overview
 
-`@johannes.latzel/check-line-limits` is a CLI tool and library for enforcing per-file SLOC limits in TypeScript and JavaScript projects.
+`@johannes.latzel/check-line-limits` is a CLI tool and library for enforcing per-file SLOC limits. TypeScript and JavaScript are supported by default, and other languages can be enabled through configuration.
 
 ## Navigation
 
@@ -10,4 +10,4 @@
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE).
+MIT

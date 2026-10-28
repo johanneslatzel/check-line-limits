@@ -1,5 +1,6 @@
 import { readdirSync } from 'node:fs';
 import { join, relative, extname } from 'node:path';
+import { resolveExtensions } from './config.js';
 import type { LineLimitsConfig } from './config.js';
 
 /** A file discovered during walking. */
@@ -10,9 +11,9 @@ export interface WalkedFile {
     relPath: string;
     /** File extension (e.g. ".ts"). */
     ext: string;
+    /** Language identifier expected by the `sloc` package (e.g. "ts"). */
+    lang: string;
 }
-
-const SUPPORTED_EXT = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
 
 /**
  * Check whether a relative path matches any of the exclude patterns.
@@ -41,6 +42,7 @@ export function isExcluded(relPath: string, exclude: string[]): boolean {
 export function walkDir(dir: string, root: string, config: LineLimitsConfig): WalkedFile[] {
     const results: WalkedFile[] = [];
     const skip = new Set(config.skipDirs);
+    const extensions = resolveExtensions(config);
     let entries;
     try {
         entries = readdirSync(dir, { withFileTypes: true });
@@ -56,14 +58,15 @@ export function walkDir(dir: string, root: string, config: LineLimitsConfig): Wa
             results.push(...walkDir(fullPath, root, config));
         } else if (entry.isFile()) {
             const ext = extname(entry.name);
-            if (!SUPPORTED_EXT.has(ext)) {
+            const lang = extensions[ext];
+            if (!lang) {
                 continue;
             }
             const relPath = relative(root, fullPath);
             if (isExcluded(relPath, config.exclude)) {
                 continue;
             }
-            results.push({ fullPath, relPath, ext });
+            results.push({ fullPath, relPath, ext, lang });
         }
     }
     return results;

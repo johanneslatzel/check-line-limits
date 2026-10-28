@@ -11,14 +11,17 @@
 [![Socket Badge](https://badge.socket.dev/npm/package/@johannes.latzel/check-line-limits/latest)](https://badge.socket.dev/npm/package/@johannes.latzel/check-line-limits/latest)
 [![AI Assisted Yes](https://img.shields.io/badge/AI%20Assisted-Yes-green)](https://github.com/mefengl/made-by-ai)
 
-CLI tool and library for enforcing per-file SLOC (Source Lines of Code) limits in TypeScript/JavaScript projects. Uses the `sloc` package to count source lines of code accurately.
+CLI tool and library for enforcing per-file SLOC (Source Lines of Code) limits. Uses the `sloc` package to count source lines of code accurately. TypeScript and JavaScript are supported by default, and additional languages can be enabled through configuration.
 
 > **Disclaimer**: This package was written entirely by AI. Use at your own risk.
+
+![check-line-limits architecture](docs/assets/check-line-limits-architecture.svg)
 
 ## Features
 
 - per-file SLOC limits with `warn` and `error` thresholds
 - configurable scan directories
+- configurable extension-to-language mappings for any language `sloc` supports
 - library API for programmatic use
 
 ## Prerequisites

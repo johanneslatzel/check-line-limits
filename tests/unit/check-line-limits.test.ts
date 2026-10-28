@@ -73,6 +73,27 @@ describe('checkLineLimits', () => {
         expect(result.hasErrors).toBe(true);
     });
 
+    it('counts Python source lines when the extension is configured', () => {
+        mkdirSync(join(tmpDir, 'src'));
+        writeFileSync(
+            join(tmpDir, 'src/app.py'),
+            [
+                '# leading comment',
+                'import os',
+                '',
+                'def separator():',
+                '    # inner comment',
+                '    """Return the platform separator."""',
+                '    return os.sep',
+                '',
+                '# trailing comment'
+            ].join('\n')
+        );
+        const result = checkLineLimits(tmpDir, makeConfig({ extensions: { '.py': 'py' } }));
+        expect(result.files).toHaveLength(1);
+        expect(result.files[0]?.sloc).toBe(3);
+    });
+
     it('skips unsupported file extensions', () => {
         mkdirSync(join(tmpDir, 'src'));
         writeFileSync(join(tmpDir, 'src/data.json'), '{"key": "value"}');

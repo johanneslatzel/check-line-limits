@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { loadConfig } from '../../src/config.js';
+import { DEFAULT_EXTENSIONS, loadConfig, resolveExtensions } from '../../src/config.js';
 
 let tmpDir: string;
 
@@ -23,6 +23,7 @@ describe('loadConfig', () => {
         expect(config.scanDirs).toEqual(['src', 'tests']);
         expect(config.exclude).toEqual(['**/*.d.ts', '**/*.generated.*']);
         expect(config.skipDirs).toEqual(['node_modules', '.git', 'dist', 'coverage']);
+        expect(config.extensions).toEqual({});
     });
 
     it('loads full config from file', () => {
@@ -34,7 +35,8 @@ describe('loadConfig', () => {
                 error: 200,
                 scanDirs: ['lib'],
                 skipDirs: ['vendor'],
-                exclude: ['build/**']
+                exclude: ['build/**'],
+                extensions: { '.py': 'py' }
             })
         );
         const config = loadConfig(configPath);
@@ -43,6 +45,7 @@ describe('loadConfig', () => {
         expect(config.scanDirs).toEqual(['lib']);
         expect(config.exclude).toEqual(['build/**']);
         expect(config.skipDirs).toEqual(['vendor']);
+        expect(config.extensions).toEqual({ '.py': 'py' });
     });
 
     it('merges partial config with defaults', () => {
@@ -53,6 +56,7 @@ describe('loadConfig', () => {
         expect(config.error).toBe(1000);
         expect(config.scanDirs).toEqual(['src', 'tests']);
         expect(config.skipDirs).toEqual(['node_modules', '.git', 'dist', 'coverage']);
+        expect(config.extensions).toEqual({});
     });
 
     it('handles malformed JSON gracefully', () => {
@@ -61,5 +65,18 @@ describe('loadConfig', () => {
         const config = loadConfig(configPath);
         expect(config.warn).toBe(500);
         expect(config.error).toBe(1000);
+    });
+});
+
+describe('resolveExtensions', () => {
+    it('returns the default mappings when none are configured', () => {
+        expect(resolveExtensions({})).toEqual(DEFAULT_EXTENSIONS);
+    });
+
+    it('merges configured mappings over the defaults', () => {
+        const resolved = resolveExtensions({ extensions: { '.py': 'py', '.ts': 'tsx' } });
+        expect(resolved['.py']).toBe('py');
+        expect(resolved['.ts']).toBe('tsx');
+        expect(resolved['.js']).toBe('js');
     });
 });

@@ -4,18 +4,6 @@ import sloc from 'sloc';
 import type { LineLimitsConfig } from './config.js';
 import { walkDir } from './walker.js';
 
-/**
- * Map of file extensions to the language identifier expected by the `sloc` package.
- * The `sloc` package uses bare identifiers (e.g. "ts") rather than file extensions.
- */
-const EXT_MAP: Record<string, string> = {
-    '.ts': 'ts',
-    '.tsx': 'tsx',
-    '.js': 'js',
-    '.jsx': 'jsx',
-    '.mjs': 'mjs'
-};
-
 /** Result for a single scanned file. */
 export interface FileResult {
     /** Path relative to the project root. */
@@ -50,14 +38,13 @@ export function checkLineLimits(root: string, config: LineLimitsConfig): CheckRe
         try {
             if (statSync(dirPath).isDirectory()) {
                 const walked = walkDir(dirPath, root, config);
-                for (const { fullPath, relPath, ext } of walked) {
+                for (const { fullPath, relPath, lang } of walked) {
                     let code: string;
                     try {
                         code = readFileSync(fullPath, 'utf8');
                     } catch {
                         continue;
                     }
-                    const lang = EXT_MAP[ext]!;
                     try {
                         const stats = sloc(code, lang);
                         const slocCount = stats.source;
@@ -70,7 +57,8 @@ export function checkLineLimits(root: string, config: LineLimitsConfig): CheckRe
                         }
                         files.push({ path: relPath, sloc: slocCount, level });
                     } catch {
-                        // Unsupported extension — skip silently
+                        // Unsupported language identifier
+                        // skip silently
                     }
                 }
             }
